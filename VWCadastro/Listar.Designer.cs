@@ -29,39 +29,40 @@ namespace ViewCadastro
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGV = new System.Windows.Forms.DataGridView();
+            this.dgv = new System.Windows.Forms.DataGridView();
             this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nome = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.endereco = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.telefone = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.btnNovo = new System.Windows.Forms.ToolStripMenuItem();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGV)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // dataGV
+            // dgv
             // 
-            this.dataGV.AllowUserToAddRows = false;
-            this.dataGV.AllowUserToDeleteRows = false;
-            this.dataGV.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGV.BackgroundColor = System.Drawing.Color.BlanchedAlmond;
-            this.dataGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGV.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgv.AllowUserToAddRows = false;
+            this.dgv.AllowUserToDeleteRows = false;
+            this.dgv.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgv.BackgroundColor = System.Drawing.Color.BlanchedAlmond;
+            this.dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id,
             this.nome,
             this.endereco,
             this.telefone});
-            this.dataGV.Location = new System.Drawing.Point(52, 56);
-            this.dataGV.Name = "dataGV";
-            this.dataGV.ReadOnly = true;
-            this.dataGV.RowTemplate.Height = 25;
-            this.dataGV.Size = new System.Drawing.Size(694, 372);
-            this.dataGV.TabIndex = 0;
-            this.dataGV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
+            this.dgv.Location = new System.Drawing.Point(52, 56);
+            this.dgv.Name = "dgv";
+            this.dgv.ReadOnly = true;
+            this.dgv.RowTemplate.Height = 25;
+            this.dgv.Size = new System.Drawing.Size(694, 372);
+            this.dgv.TabIndex = 0;
+            this.dgv.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
             // 
             // id
             // 
+            this.id.DataPropertyName = "id";
             this.id.HeaderText = "ID";
             this.id.MaxInputLength = 5;
             this.id.Name = "id";
@@ -70,6 +71,7 @@ namespace ViewCadastro
             // 
             // nome
             // 
+            this.nome.DataPropertyName = "nome";
             this.nome.HeaderText = "Nome";
             this.nome.MaxInputLength = 50;
             this.nome.Name = "nome";
@@ -77,13 +79,17 @@ namespace ViewCadastro
             // 
             // endereco
             // 
+            this.endereco.DataPropertyName = "endereco";
             this.endereco.HeaderText = "Endereço";
+            this.endereco.MaxInputLength = 70;
             this.endereco.Name = "endereco";
             this.endereco.ReadOnly = true;
             // 
             // telefone
             // 
+            this.telefone.DataPropertyName = "telefone";
             this.telefone.HeaderText = "Telefone";
+            this.telefone.MaxInputLength = 15;
             this.telefone.Name = "telefone";
             this.telefone.ReadOnly = true;
             // 
@@ -113,13 +119,13 @@ namespace ViewCadastro
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.PeachPuff;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.dataGV);
+            this.Controls.Add(this.dgv);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Listar";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Lista de Pessoas";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGV)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -129,13 +135,13 @@ namespace ViewCadastro
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGV;
+        private System.Windows.Forms.DataGridView dgv;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem btnNovo;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
         private System.Windows.Forms.DataGridViewTextBoxColumn nome;
         private System.Windows.Forms.DataGridViewTextBoxColumn endereco;
         private System.Windows.Forms.DataGridViewTextBoxColumn telefone;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem btnNovo;
     }
 }
 
