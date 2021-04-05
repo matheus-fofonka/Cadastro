@@ -11,6 +11,8 @@ namespace DBCadastro
         MySqlCommand comando;
         MySqlDataAdapter dataAdapter;
         MySqlDataReader dataReader;
+        string stringConnection = "Server = localhost; Database = Cadastros; Uid = root; Pwd = 12354";
+
 
         public Retorno<List<ToPessoas>> Listar(ToPessoas toPessoas)
         {
@@ -26,7 +28,7 @@ namespace DBCadastro
 
             try
             {
-                conexao = new("Server = localhost; Database = Cadastros; Uid = root; Pwd = 12354");
+                conexao = new(stringConnection);
                 comando = new(strCommand, conexao);
 
                 if (tID.where)
@@ -37,11 +39,11 @@ namespace DBCadastro
                 {
                     comando.Parameters.AddWithValue("@NOME", toPessoas.Nome);
                 }
-                if (tID.where)
+                if (tEndereco.where)
                 {
                     comando.Parameters.AddWithValue("@ENDERECO", toPessoas.Endereco);
                 }
-                if (tID.where)
+                if (tTelefone.where)
                 {
                     comando.Parameters.AddWithValue("@TELEFONE", toPessoas.Telefone);
                 }
@@ -96,7 +98,7 @@ namespace DBCadastro
 
             try
             {
-                conexao = new("Server = localhost; Database = Cadastros; Uid = root; Pwd = 12354");
+                conexao = new(stringConnection);
                 comando = new(strCommand, conexao);
 
                 if (tID.where)
@@ -107,11 +109,11 @@ namespace DBCadastro
                 {
                     comando.Parameters.AddWithValue("@NOME", toPessoas.Nome);
                 }
-                if (tID.where)
+                if (tEndereco.where)
                 {
                     comando.Parameters.AddWithValue("@ENDERECO", toPessoas.Endereco);
                 }
-                if (tID.where)
+                if (tTelefone.where)
                 {
                     comando.Parameters.AddWithValue("@TELEFONE", toPessoas.Telefone);
                 }
@@ -135,6 +137,96 @@ namespace DBCadastro
 
         }
 
-      
+        public Retorno<Int32> Alterar(ToPessoas toPessoas)
+        {
+            string strCommand = "UPDATE CADASTROS.PESSOAS SET ";
+
+            (bool where, string cmd) tNome = (toPessoas.Nome != null) ? (true, " NOME = @NOME ,") : (false, "");
+            (bool where, string cmd) tEndereco = (toPessoas.Endereco != null) ? (true, " ENDERECO = @ENDERECO ,") : (false, "");
+            (bool where, string cmd) tTelefone = (toPessoas.Telefone != null) ? (true, " TELEFONE = @TELEFONE ,") : (false, "");
+            (bool where, string cmd) tID = (toPessoas.Id != null) ? (true, "ID = @ID ") : (false, "");
+
+            strCommand += (tID.where || tNome.where || tEndereco.where || tTelefone.where) ? tNome.cmd + tEndereco.cmd + tTelefone.cmd + " WHERE " + tID.cmd : "";
+
+
+            try
+            {
+                conexao = new(stringConnection);
+                comando = new(strCommand, conexao);
+
+                if (tID.where)
+                {
+                    comando.Parameters.AddWithValue("@ID", toPessoas.Id);
+                }
+                if (tNome.where)
+                {
+                    comando.Parameters.AddWithValue("@NOME", toPessoas.Nome);
+                }
+                if (tEndereco.where)
+                {
+                    comando.Parameters.AddWithValue("@ENDERECO", toPessoas.Endereco);
+                }
+                if (tTelefone.where)
+                {
+                    comando.Parameters.AddWithValue("@TELEFONE", toPessoas.Telefone);
+                }
+
+                conexao.Open();
+                comando.ExecuteNonQuery();
+
+                Retorno<int> ret = new();
+                return ret.RetornarSucesso(1);
+
+            }
+            catch (Exception Ex)
+            {
+                Retorno<int> ret = new();
+                return ret.RetornarFalha(Ex.Message);
+            }
+            finally
+            {
+                conexao.Close();
+            }
+
+        }
+
+        public Retorno<Int32> Excluir(ToPessoas toPessoas)
+        {
+            string strCommand = "DELETE FROM CADASTROS.PESSOAS ";
+
+            (bool where, string cmd) tID = (toPessoas.Id != null) ? (true, "ID = @ID ") : (false, "");
+
+            strCommand += (tID.where) ? " WHERE " + tID.cmd : "";
+
+
+            try
+            {
+                conexao = new(stringConnection);
+                comando = new(strCommand, conexao);
+
+                if (tID.where)
+                {
+                    comando.Parameters.AddWithValue("@ID", toPessoas.Id);
+                }
+
+                conexao.Open();
+                comando.ExecuteNonQuery();
+
+                Retorno<int> ret = new();
+                return ret.RetornarSucesso(1);
+
+            }
+            catch (Exception Ex)
+            {
+                Retorno<int> ret = new();
+                return ret.RetornarFalha(Ex.Message);
+            }
+            finally
+            {
+                conexao.Close();
+            }
+
+        }
+
     }
 }
