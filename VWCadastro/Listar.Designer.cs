@@ -125,6 +125,7 @@ namespace ViewCadastro
             this.Name = "Listar";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Lista de Pessoas";
+            this.Load += new System.EventHandler(this.Listar_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

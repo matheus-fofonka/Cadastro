@@ -14,18 +14,20 @@ namespace ViewCadastro
 {
     public partial class Usuario : Form
     {
-        private string state;
-        private ToPessoas toObter;
 
+
+        private string state;
+        public Listar Main { get; set; }
         public ToPessoas ToObter { get; set; }
 
         public string State
         {
-           
-            set {
+
+            set
+            {
                 switch (value)
                 {
-                    case "novo":                 
+                    case "novo":
                         lblId.Enabled = false;
                         txtId.Visible = false;
                         lblId.Visible = false;
@@ -48,7 +50,7 @@ namespace ViewCadastro
                         txtEndereco.Enabled = true;
                         txtTelefone.Enabled = true;
                         btnSalvar.Enabled = true;
-                        excluir.Enabled = false;
+                        excluir.Enabled = true;
                         editar.Enabled = false;
                         break;
                     case "obter":
@@ -69,7 +71,7 @@ namespace ViewCadastro
                     default:
                         break;
                 }
-                state = value; 
+                state = value;
             }
         }
 
@@ -91,8 +93,76 @@ namespace ViewCadastro
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
+            if (e.ClickedItem.Name == "excluir" && (state == "obter" || state == "editar"))
+            {
+                if (DialogResult.Yes == MessageBox.Show("Tem certeza que deseja excluir o registro?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2))
+                {
+                    RNPessoas rn = new();
+                    ToPessoas to = new() { Id = int.Parse(txtId.Text.Trim())};
+                    Retorno<int> retorno = new();
+                    retorno = rn.Excluir(to);
+                    if (!retorno.Ok) MessageBox.Show("ERRO : " + retorno.Mensagem);
+                    else MessageBox.Show(retorno.Mensagem);
+                    MessageBox.Show("Registro excluido com sucesso", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    Main.Dgv_load();
+                    this.Close();
+                }
+            }
             State = e.ClickedItem.Name;
-            
+
+        }
+
+        private void btnSalvar_Click(object sender, EventArgs e)
+        {
+            switch (state)
+            {
+                case "editar":
+                    if (!validaForm()) MessageBox.Show("Favor preencha todos os campos.");
+                    else
+                    {
+                        if (DialogResult.Yes == MessageBox.Show("Tem certeza que deseja alterar o registro?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2))
+                        {
+                            RNPessoas rn = new();
+                            ToPessoas to = new() { Id = int.Parse(txtId.Text.Trim()), Nome = txtNome.Text.Trim(), Endereco = txtEndereco.Text.Trim(), Telefone = txtTelefone.Text.Trim() };
+                            Retorno<int> retorno = new();
+                            retorno = rn.Alterar(to);
+                            if (!retorno.Ok) MessageBox.Show("ERRO : " + retorno.Mensagem);
+                            else MessageBox.Show(retorno.Mensagem);
+                            MessageBox.Show("Registro alterado com sucesso", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            Main.Dgv_load();
+                            this.Close();
+                        }
+                    }
+                    break;
+                case "novo":
+
+                    if (!validaForm()) MessageBox.Show("Favor preencha todos os campos.");
+                    else
+                    {
+                        ToPessoas to = new() { Nome = txtNome.Text.Trim(), Endereco = txtEndereco.Text.Trim(), Telefone = txtTelefone.Text.Trim() };
+                        RNPessoas rn = new();
+                        Retorno<int> retorno = new();
+                        retorno = rn.Incluir(to);
+                        if (!retorno.Ok) MessageBox.Show("ERRO : " + retorno.Mensagem);
+                        else MessageBox.Show(retorno.Mensagem);
+
+                        Main.Dgv_load();
+                        this.Close();
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        private bool validaForm()
+        {
+            bool ret = (txtNome.Text == "") || (txtEndereco.Text == "") || (txtTelefone.Text == "") ? false : true;
+            return ret;
+
         }
     }
 }

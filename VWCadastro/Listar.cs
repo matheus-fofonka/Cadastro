@@ -19,18 +19,19 @@ namespace ViewCadastro
         {
             InitializeComponent();
 
-            dgv_load();  
+            Dgv_load();  
     }
 
         private  List<ToPessoas> Lista;
 
-      private void dgv_load()
+      public void Dgv_load()
         {
             ToPessoas to = new();
             RNPessoas rn = new();
             Retorno < List < ToPessoas >> retorno = new();
 
             retorno = rn.Listar(to);
+            if (!retorno.Ok)  MessageBox.Show("ERRO : " + retorno.Mensagem); 
 
             var novaListPessoas = retorno.Dados.Select(toPessoas => new
             {
@@ -52,16 +53,25 @@ namespace ViewCadastro
             Usuario user = new();
             user.ToObter = Lista[e.RowIndex];
             user.State = "obter";
-            
+            user.Main = this;
             user.Show();
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             Usuario user = new();
+
             user.State = "novo";
+            user.Main = this;
             user.Show();
             
         }
+
+        private void Listar_Load(object sender, EventArgs e)
+        {
+            
+        }
+
+        
     }
 }
