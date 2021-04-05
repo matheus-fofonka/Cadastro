@@ -10,12 +10,23 @@ using System.Windows.Forms;
 
 namespace ViewCadastro
 {
-    public partial class Form1 : Form
+    public partial class Listar : Form
     {
-        public Form1()
+        public Listar()
         {
             InitializeComponent();
         }
 
+      
+
+        private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
     }
 }

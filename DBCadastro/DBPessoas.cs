@@ -18,12 +18,14 @@ namespace DBCadastro
         {
             string strCommand = "SELECT ID, NOME, ENDERECO, TELEFONE FROM CADASTROS.PESSOAS ";
 
-            (bool where, string cmd) tID = (toPessoas.Id != null) ? (true, " @ID ,") : (false, "");
-            (bool where, string cmd) tNome = (toPessoas.Nome != null) ? (true, " @NOME ,") : (false, "");
-            (bool where, string cmd) tEndereco = (toPessoas.Endereco != null) ? (true, " @ENDERECO ,") : (false, "");
-            (bool where, string cmd) tTelefone = (toPessoas.Telefone != null) ? (true, " @TELEFONE ,") : (false, "");
+            (bool where, string cmd) tID = (toPessoas.Id != null) ? (true, "ID = @ID AND ") : (false, "");
+            (bool where, string cmd) tNome = (toPessoas.Nome != null) ? (true, "NOME = @NOME AND ") : (false, "");
+            (bool where, string cmd) tEndereco = (toPessoas.Endereco != null) ? (true, "ENDERECO = @ENDERECO AND ") : (false, "");
+            (bool where, string cmd) tTelefone = (toPessoas.Telefone != null) ? (true, "TELEFONE = @TELEFONE AND ") : (false, "");
 
-            strCommand += (tID.where || tNome.where || tEndereco.where || tTelefone.where) ? "WHERE " + tID.cmd + tNome.cmd + tEndereco.cmd + tTelefone.cmd : "";
+            string strTemp = "WHERE " + tID.cmd + tNome.cmd + tEndereco.cmd + tTelefone.cmd;
+
+            strCommand += (tID.where || tNome.where || tEndereco.where || tTelefone.where) ? strTemp.Remove(strTemp.Length - 4,4) : "";
 
 
             try
@@ -48,27 +50,26 @@ namespace DBCadastro
                     comando.Parameters.AddWithValue("@TELEFONE", toPessoas.Telefone);
                 }
 
+                List<ToPessoas> list = new();
+                
                 conexao.Open();
                 dataReader = comando.ExecuteReader();
 
-                //dataReader em algo
-                if (dataReader.HasRows)
+
+                while (dataReader.Read())
                 {
-                    while (dataReader.Read())
+                    list.Add(new ToPessoas()
                     {
-                        Console.WriteLine("{0}\t{1}", dataReader.GetInt32(0),
-                            dataReader.GetString(1));
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("No rows found.");
+                        Id = Convert.ToInt32(dataReader["ID"]),
+                        Nome = dataReader["NOME"].ToString(),
+                        Endereco = dataReader["ENDERECO"].ToString(),
+                        Telefone = dataReader["TELEFONE"].ToString()
+                    });
                 }
                 dataReader.Close();
-
-                //formar lista
+              
                 Retorno<List<ToPessoas>> ret = new();
-                return ret.RetornarSucesso(new());
+                return ret.RetornarSucesso(list);
 
             }
             catch (Exception Ex)
@@ -86,14 +87,14 @@ namespace DBCadastro
 
         public Retorno<Int32> Incluir(ToPessoas toPessoas)
         {
-            string strCommand = "INSERT INTO CADASTROS.PESSOAS (ID, NOME, ENDERECO, TELEFONE) ";
+            string strCommand = "INSERT INTO CADASTROS.PESSOAS (NOME, ENDERECO, TELEFONE) ";
 
             (bool where, string cmd) tID = (toPessoas.Id != null) ? (true, " @ID ,") : (false, "");
             (bool where, string cmd) tNome = (toPessoas.Nome != null) ? (true, " @NOME ,") : (false, "");
             (bool where, string cmd) tEndereco = (toPessoas.Endereco != null) ? (true, " @ENDERECO ,") : (false, "");
-            (bool where, string cmd) tTelefone = (toPessoas.Telefone != null) ? (true, " @TELEFONE ,") : (false, "");
+            (bool where, string cmd) tTelefone = (toPessoas.Telefone != null) ? (true, " @TELEFONE ") : (false, "");
 
-            strCommand += (tID.where || tNome.where || tEndereco.where || tTelefone.where) ? "VALUES ( " + tID.cmd + tNome.cmd + tEndereco.cmd + tTelefone.cmd : "";
+            strCommand += (tID.where || tNome.where || tEndereco.where || tTelefone.where) ? "VALUES ( " + tID.cmd + tNome.cmd + tEndereco.cmd + tTelefone.cmd +" )": "";
 
 
             try
@@ -146,7 +147,9 @@ namespace DBCadastro
             (bool where, string cmd) tTelefone = (toPessoas.Telefone != null) ? (true, " TELEFONE = @TELEFONE ,") : (false, "");
             (bool where, string cmd) tID = (toPessoas.Id != null) ? (true, "ID = @ID ") : (false, "");
 
-            strCommand += (tID.where || tNome.where || tEndereco.where || tTelefone.where) ? tNome.cmd + tEndereco.cmd + tTelefone.cmd + " WHERE " + tID.cmd : "";
+            string strTemp = tNome.cmd + tEndereco.cmd + tTelefone.cmd;
+
+            strCommand += (tID.where || tNome.where || tEndereco.where || tTelefone.where) ? strTemp.Remove(strTemp.Length - 1 , 1) + " WHERE " + tID.cmd : "";
 
 
             try

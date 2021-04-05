@@ -5,7 +5,7 @@ using DBCadastro;
 
 namespace RNCadastro
 {
-    class RNPessoas
+    public class RNPessoas
     {
         public Retorno<List<ToPessoas>> Listar(ToPessoas toPessoas)
         {
@@ -37,12 +37,8 @@ namespace RNCadastro
                 #region Validação de campos obrigatórios
                 if (toPessoas.Endereco == null)
                 {
-                    return retIncluir.RetornarFalha("Campo obrigatório ENDEREÇO não informado.");
-                }
-                if (toPessoas.Id == null)
-                {
-                    return retIncluir.RetornarFalha("Campo obrigatório ID não informado.");
-                }
+                    return retIncluir.RetornarFalha("Campo obrigatório ENDERECO não informado.");
+                }             
                 if (toPessoas.Nome == null)
                 {
                     return retIncluir.RetornarFalha("Campo obrigatório NOME não informado.");
@@ -52,6 +48,8 @@ namespace RNCadastro
                     return retIncluir.RetornarFalha("Campo obrigatório TELEFONE não informado.");
                 }
                 #endregion
+
+                toPessoas.Id = null;
 
                 retIncluir = new();
 
